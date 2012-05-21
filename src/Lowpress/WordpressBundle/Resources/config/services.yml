@@ -1,0 +1,7 @@
+parameters:
+#    lowpress_wordpress.example.class: Lowpress\WordpressBundle\Example
+
+services:
+#    lowpress_wordpress.example:
+#        class: %lowpress_wordpress.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

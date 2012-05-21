@@ -1,0 +1,5 @@
+LowpressWordpressBundle_homepage:
+    pattern:  /{url}
+    defaults: { _controller: LowpressWordpressBundle:Default:index }
+    requirements:
+        url: ".*"
