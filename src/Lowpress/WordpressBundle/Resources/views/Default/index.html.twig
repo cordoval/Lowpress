@@ -1,1 +1,54 @@
-Hello {{ name }}!
+{% extends 'LowpressWordpressBundle::layout.html.twig' %}
+
+{% block content %}
+
+	{% if lowpress_have_posts() %}
+		
+		{% for i in 0..wp_query.post_count-1 %}
+		
+			{{ lowpress_the_post() }}
+			
+			<article role="article" {{ lowpress_post_class() }} id="post-{{ lowpress_the_ID() }}">
+			
+				<header>
+			
+					<div class="page-header">
+
+						<h1><a href="{{ lowpress_the_permalink() }}">{{ lowpress_the_title() }}</a></h1>
+
+					</div>
+
+				</header>
+				
+				<section>
+				
+					{{ lowpress_the_content() }}
+					
+				</section>
+				
+				<footer>
+
+					<div class="postmetadata">
+								
+						{{ lowpress_the_tags('Tags: ', ' ', '<br />') }}
+
+						Posted in {{ lowpress_the_category(', ') }} |
+
+						{{ lowpress_comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;') }}
+
+					</div>
+
+				</footer>
+				
+			</article>
+
+		{% endfor %}
+		
+		
+	{% else %}
+	
+		<h1>No posts found</h1>
+		
+	{% endif %}
+
+{% endblock %}

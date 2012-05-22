@@ -1,7 +1,8 @@
 parameters:
-#    lowpress_wordpress.example.class: Lowpress\WordpressBundle\Example
+    lowpress_wordpress.wordpress_extension.class: Lowpress\WordpressBundle\Twig\WordpressExtension
 
 services:
-#    lowpress_wordpress.example:
-#        class: %lowpress_wordpress.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lowpress_wordpress.wordpress_extension:
+        class: %lowpress_wordpress.wordpress_extension.class%
+        tags:
+            -  { name: twig.extension }

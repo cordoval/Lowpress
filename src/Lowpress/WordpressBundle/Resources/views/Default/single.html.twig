@@ -1,0 +1,51 @@
+{% extends 'LowpressWordpressBundle::layout.html.twig' %}
+
+{% block body %}
+
+	{% if lowpress_have_posts() %}
+	
+		{% for i in 0..wp_query.post_count-1 %}
+		
+			{{ lowpress_the_post() }}
+			
+			<article role="article" {{ lowpress_post_class() }} id="post-{{ lowpress_the_ID() }}">
+
+				<header>
+
+					<div class="page-header">
+
+						<h1>{{ lowpress_the_title() }}</h1>
+
+					</div>
+					
+					{% include 'LowpressWordpressBundle:Default:meta.html.twig' %}
+
+				</header>
+
+
+				<section>
+				
+					{{ lowpress_the_content() }}
+
+					{{ lowpress_wp_link_pages({'before' : 'Pages: ', 'next_or_number' : 'number'}) }}
+
+
+				</section>
+				
+				<footer>
+
+					{{ lowpress_the_tags( 'Tags: ', ' ', '') }}
+					
+					{{ lowpress_edit_post_link('Edit this entry','','.') }}
+				
+				</footer>
+				
+			</article>
+
+			{{ lowpress_comments_template() }}
+
+		{% endfor %}
+		
+	{% endif %}
+	
+{% endblock %}
