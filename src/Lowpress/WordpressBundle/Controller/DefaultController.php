@@ -11,9 +11,11 @@ class DefaultController extends Controller
 
     public function indexAction()
     {
-        global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 
         $docroot = $this->getRequest()->server->get('DOCUMENT_ROOT');
+
+        global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
+
         require($docroot.'/wp-blog-header.php');
 
         $parameters = array_merge($wp_query->query_vars, array(
