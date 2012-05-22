@@ -1073,7 +1073,7 @@ function get_comments_popup_template() {
  * @param bool $require_once Whether to require_once or require. Default true. Has no effect if $load is false.
  * @return string The template filename if one is located.
  */
-function locate_template($template_names, $load = false, $require_once = true ) {
+function locate_template_old($template_names, $load = false, $require_once = true ) {
 	$located = '';
 	foreach ( (array) $template_names as $template_name ) {
 		if ( !$template_name )
@@ -1105,7 +1105,7 @@ function locate_template($template_names, $load = false, $require_once = true ) 
  * @param string $_template_file Path to template file.
  * @param bool $require_once Whether to require_once or require. Default true.
  */
-function load_template( $_template_file, $require_once = true ) {
+function load_template_old( $_template_file, $require_once = true ) {
 	global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 
 	if ( is_array( $wp_query->query_vars ) )
