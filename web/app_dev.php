@@ -24,6 +24,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
+$kernel->boot();
+
+$doctrine = $kernel->getContainer()->get('doctrine');
+$conn = $doctrine->getConnection($doctrine->getDefaultConnectionName());
+define('DB_NAME',       $conn->getDatabase());
+define('DB_USER',       $conn->getUsername());
+define('DB_PASSWORD',   $conn->getPassword());
+define('DB_HOST',       $conn->getHost());
+define('DB_CHARSET',    'utf8');
+define('DB_COLLATE',    '');
+define('WP_USE_THEMES', false);
+require('./wp-blog-header.php');
+
 $response = $kernel->handle(Request::createFromGlobals());
 
 if ($response->getStatusCode() !== 404)
@@ -32,16 +45,6 @@ if ($response->getStatusCode() !== 404)
 }
 else
 {
-    $doctrine = $kernel->getContainer()->get('doctrine');
-    $conn = $doctrine->getConnection($doctrine->getDefaultConnectionName());
-    define('DB_NAME',       $conn->getDatabase());
-    define('DB_USER',       $conn->getUsername());
-    define('DB_PASSWORD',   $conn->getPassword());
-    define('DB_HOST',       $conn->getHost());
-    define('DB_CHARSET',    'utf8');
-    define('DB_COLLATE',    '');
-    define('WP_USE_THEMES', false);
-    require('./wp-blog-header.php');
     render_wordpress_twig_template($kernel);
 }
 
