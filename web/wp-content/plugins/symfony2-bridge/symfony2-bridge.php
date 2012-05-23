@@ -66,28 +66,10 @@
       {
         function load_template( $_template_file, $require_once = true )
         {
-          global $kernel, $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
-
           if ($symfony_template = get_symfony_template_name($_template_file))
           {
-            $kernel
-              ->getContainer()
-              ->get('twig')
-              ->loadTemplate($symfony_template)
-              ->display(array_merge($wp_query->query_vars, array(
-                'posts'                     => $posts,
-                'post'                      => $post,
-                'wp_did_header'             => $wp_did_header,
-                'wp_did_template_redirect'  => $wp_did_template_redirect,
-                'wp_query'                  => $wp_query,
-                'wp_rewrite'                => $wp_rewrite,
-                'wpdb'                      => $wpdb,
-                'wp_version'                => $wp_version,
-                'wp'                        => $wp,
-                'id'                        => $id,
-                'comment'                   => $comment,
-                'user_ID'                   => $user_ID
-            )));
+            global $kernel;
+            render_twig_include($kernel->getContainer()->get('twig'), $symfony_template);
             return true;
           }
           return load_template_old($_template_file, $require_once);
@@ -97,7 +79,6 @@
 
     function render_wordpress_twig_template($kernel){
 
-      global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 
       $template = false;
       if     (is_404()):            throw $this->createNotFoundException('The product does not exist');
@@ -124,7 +105,15 @@
 
       $container->set('request', \Symfony\Component\HttpFoundation\Request::createFromGlobals());
       $container->enterScope('request');
-      $container->get('twig')->loadTemplate($template)->display(array_merge($wp_query->query_vars, array(
+      render_twig_include($container->get('twig'), $template);
+
+    }
+
+    function render_twig_include($twig, $template){
+
+      global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
+
+      $twig->loadTemplate($template)->display(array_merge($wp_query->query_vars, array(
                   'posts'                     => $posts,
                   'post'                      => $post,
                   'wp_did_header'             => $wp_did_header,
