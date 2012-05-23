@@ -6,6 +6,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class LowpressWordpressBundle extends Bundle
 {
+
   public function boot()
   {
     $docroot = $this->container->getParameter('kernel.root_dir').'/../web/';
@@ -21,7 +22,9 @@ class LowpressWordpressBundle extends Bundle
     define('DB_COLLATE',    '');
 
     define('WP_USE_THEMES', false);
-    require_once($docroot.'wp-load.php');
+
+    if (!defined('WP_STANDALONE') || !WP_STANDALONE)
+      require_once($docroot.'wp-load.php');
 
     foreach(get_defined_vars() as $key => $val)
       $GLOBALS[$key] = $val;

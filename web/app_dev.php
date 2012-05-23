@@ -24,4 +24,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
+
+/* handle wordpress admin */
+$uri = preg_replace('/\?(.*)$/', '', substr($_SERVER['REQUEST_URI'], 1));
+if (is_dir($uri)) $uri .= 'index.php';
+if (file_exists($uri))
+{
+  define('WP_STANDALONE', true);
+  $kernel->boot();
+  chdir(dirname($uri));
+  $_SERVER['PHP_SELF'] = '/'.$uri;
+  require basename($uri);
+  exit;
+}
+
 $kernel->handle(Request::createFromGlobals())->send();

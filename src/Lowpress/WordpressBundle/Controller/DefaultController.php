@@ -14,7 +14,7 @@ class DefaultController extends Controller
 
         $docroot = $this->getRequest()->server->get('DOCUMENT_ROOT');
 
-        global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
+        extract($GLOBALS);
 
         require($docroot.'/wp-blog-header.php');
 
