@@ -24,18 +24,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
+$response = $kernel->handle(Request::createFromGlobals());
 
-/* handle wordpress admin */
-$uri = preg_replace('/\?(.*)$/', '', substr($_SERVER['REQUEST_URI'], 1));
-if (is_dir($uri)) $uri .= 'index.php';
-if (file_exists($uri))
+if ($response->getStatusCode() !== 404)
 {
-  define('WP_STANDALONE', true);
-  $kernel->boot();
-  chdir(dirname($uri));
-  $_SERVER['PHP_SELF'] = '/'.$uri;
-  require basename($uri);
-  exit;
+  $response->send();
+}
+else
+{
+    $doctrine = $kernel->getContainer()->get('doctrine');
+    $conn = $doctrine->getConnection($doctrine->getDefaultConnectionName());
+    define('DB_NAME',       $conn->getDatabase());
+    define('DB_USER',       $conn->getUsername());
+    define('DB_PASSWORD',   $conn->getPassword());
+    define('DB_HOST',       $conn->getHost());
+    define('DB_CHARSET',    'utf8');
+    define('DB_COLLATE',    '');
+    define('WP_USE_THEMES', false);
+    require('./wp-blog-header.php');
+    render_wordpress_twig_template($kernel);
 }
 
-$kernel->handle(Request::createFromGlobals())->send();
