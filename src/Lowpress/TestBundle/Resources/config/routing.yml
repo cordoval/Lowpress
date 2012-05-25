@@ -1,0 +1,3 @@
+LowpressTestBundle_homepage:
+    pattern:  /
+    defaults: { _controller: LowpressTestBundle:Default:index }
