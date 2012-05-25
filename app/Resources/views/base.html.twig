@@ -1,4 +1,5 @@
-{{ lowpress_get_header() }}
-	{% block body %}{% endblock %}
-	{% block javascripts %}{% endblock %}
-{{ lowpress_get_footer() }}
+{% use "LowpressWordpressBundle:Default:blocks/header.html.twig" %}
+{% use "LowpressWordpressBundle:Default:blocks/footer.html.twig" %}
+{% block html_top %}{{ parent() }}{% endblock %}
+{% block body %}{% endblock %}
+{% block html_bottom %}{{ parent() }}{% endblock %}

@@ -1,0 +1,52 @@
+{% use "LowpressWordpressBundle:Default:blocks/basestyles.html.twig" %}
+{% block html_top %}
+  <!doctype html>  
+  <html {{ lowpress_language_attributes() }}>
+  
+  {% block header %}
+    <head profile="http://gmpg.org/xfn/11">
+	
+	{% block meta %}
+		<meta http-equiv="Content-Type" content="{{ lowpress_bloginfo('html_type') }}; charset={{ lowpress_bloginfo('charset') }}" />
+		{% if lowpress_is_search() %}
+			<meta name="robots" content="noindex, nofollow" />
+		{% endif %}
+	{% endblock %}
+	
+	{% block title %}
+		<title>
+		      {% if lowpress_is_tag() %}
+			 {{ lowpress_single_tag_title("Tag Archive for &quot;") }} &quot; - 
+		      {% elseif lowpress_is_archive() %}
+			 {{ lowpress_wp_title('') }} Archive - 
+		      {% elseif lowpress_is_search() %}
+			Search for &quot;{{ lowpress_wp_specialchars(s) }}&quot; - 
+		      {% elseif ((lowpress_is_404() == false) and (lowpress_is_single()) or (lowpress_is_page())) %}
+			{{ lowpress_wp_title('') }} - 
+		      {% elseif lowpress_is_404() %}
+			Not Found -
+		      {% elseif lowpress_is_home() %}
+			{{ lowpress_bloginfo('name') }} - {{ lowpress_bloginfo('description') }}
+		      {% else %}
+			{{ lowpress_bloginfo('name') }}
+		      {% endif %}
+		      {% if paged is defined and paged>1 %}
+			 - page {{ paged }}
+		      {% endif %}
+		</title>
+	{% endblock %}
+	
+	{% block javascript %}
+		{% if lowpress_is_singular() %}{{ lowpress_wp_enqueue_script( 'comment-reply' ) }}{% endif %}
+	{% endblock %}
+	
+	{{ lowpress_wp_head() }}
+
+	{% block stylesheets %}{{ parent() }}{% endblock %}
+	
+    </head>
+  {% endblock %}
+  
+  <body {{ lowpress_body_class() }}>
+
+{% endblock %}	

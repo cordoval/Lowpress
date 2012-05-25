@@ -20,6 +20,7 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 require_once __DIR__.'/../app/bootstrap.php.cache';
 require_once __DIR__.'/../app/AppKernel.php';
 
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 
 $kernel = new AppKernel('dev', true);
@@ -35,7 +36,17 @@ define('DB_HOST',       $conn->getHost());
 define('DB_CHARSET',    'utf8');
 define('DB_COLLATE',    '');
 define('WP_USE_THEMES', false);
-require('./wp-blog-header.php');
+
+$uri = preg_replace("/([^?]*)?.*$/i", "\\1", substr($_SERVER['REQUEST_URI'], 1));
+if (is_dir($uri)) $uri .= "index.php";
+if (file_exists($uri)){
+  $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'] = '/'.$uri;
+  chdir(dirname($uri));
+  include basename($uri);
+  exit;
+}
+
+require_once('./wp-load.php');
 
 $response = $kernel->handle(Request::createFromGlobals());
 
@@ -45,6 +56,7 @@ if ($response->getStatusCode() !== 404)
 }
 else
 {
-    render_wordpress_twig_template($kernel);
+  require('./wp-blog-header.php');
+  render_wordpress_twig_template($kernel);
 }
 
